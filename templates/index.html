@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat</title>
+    <link rel="stylesheet" type="text/css" href="/static/styles.css">
+</head>
+<body>
+    <h1>Chat em Tempo Real</h1>
+    <form action="" onsubmit="sendMessage(event)">
+        <input type="text" id="messageText" autocomplete="off"/>
+        <button>Enviar Mensagem</button>
+    </form>
+    <ul id="messages">
+    </ul>
+    <script>
+        const ws = new WebSocket("ws://localhost:8000/ws");
+        ws.onmessage = function(event) {
+            const messages = document.getElementById('messages')
+            const message = document.createElement('li')
+            message.textContent = event.data
+            messages.appendChild(message)
+        };
+
+        function sendMessage(event) {
+            const input = document.getElementById("messageText")
+            ws.send(input.value)
+            input.value = ''
+            event.preventDefault()
+        }
+    </script>
+</body>
+</html>
